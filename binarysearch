@@ -1,0 +1,16 @@
+function bs(start, end, sortedArr, searchKey) {
+  var len = end - start,
+    mid = Math.floor(len/2) + start;
+  if(len <= 0) return;
+  if(searchKey === sortedArr[mid]) {
+    return mid;
+  } else if(searchKey < sortedArr[mid]) {
+    return bs(start, mid, sortedArr, searchKey);
+  } else {
+    return bs(mid+1, end, sortedArr, searchKey);
+  }
+}
+
+var searchKey = 5;
+var sortedArr = [1,2,3,4,5,6,7,8,9,10,11,12];
+var x = bs(0, sortedArr.length-1, sortedArr, searchKey);

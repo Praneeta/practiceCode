@@ -1,0 +1,34 @@
+function ransomNoteCheck(magazine, note) {
+  var magazineWords = magazine.split(" "),
+    noteWords = note.split(" "),
+    magazineWordsCount = {},
+    word;
+  if(noteWords.length > magazineWords.length) return false;
+  for(var i=0; i<magazineWords.length; i++) {
+    magazineWordsCount[magazineWords[i]] =
+      magazineWordsCount[magazineWords[i]]? magazineWordsCount[magazineWords[i]] + 1 : 1;
+  }
+  for(var i=0; i<noteWords.length; i++) {
+    word = noteWords[i];
+    if(magazineWordsCount[word] && magazineWordsCount[word] > 0) {
+      magazineWordsCount[word] = magazineWordsCount[word] - 1;
+    } else {
+      return false;
+    }
+  }
+  return true;
+}
+
+function testRansomNoteCheck() {
+  var t1, t2, t3, t4;
+  t1 = ransomNoteCheck('give me one grand today night', 'give one grand today');
+  console.log(t1, "pass", t1 === true);
+  t2 = ransomNoteCheck('two times three is not four', 'two times two is four');
+  console.log(t2, "pass", t2 === false);
+  t3 = ransomNoteCheck('small magazine', 'small magazine will fail');
+  console.log(t3, "pass", t3 === false);
+  t4 = ransomNoteCheck('two times two is never not four', 'four is two times two');
+  console.log(t4, "pass", t4 === true);
+}
+
+testRansomNoteCheck();

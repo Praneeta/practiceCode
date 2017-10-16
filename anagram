@@ -1,0 +1,37 @@
+function isAnagram(a, b) {
+  var aCharCounts = {},
+    bCharCounts = {},
+    missingChars = 0,
+    c;
+  for(var i =0; i< a.length; i++) {
+    c = a[i];
+    aCharCounts[c] = aCharCounts[c]? aCharCounts[c]+1 : 1;
+  }
+  for(var i =0; i< b.length; i++) {
+    c = b[i];
+    bCharCounts[c] = bCharCounts[c]? bCharCounts[c]+1 : 1;
+  }
+  for(var c in aCharCounts) {
+    if(bCharCounts[c]) {
+      missingChars += Math.abs(aCharCounts[c]-bCharCounts[c]);
+      bCharCounts[c] = 0;
+    } else {
+      missingChars += aCharCounts[c];
+    }
+  }
+  for(var c in bCharCounts) {
+    missingChars += bCharCounts[c];
+  }
+  return missingChars;
+}
+
+function testIsAnagram() {
+  var t1 = isAnagram("cde", "abc");
+  console.log(t1, "pass", t1 === 4);
+  var t2 = isAnagram("cde", "abcc");
+  console.log(t2, "pass", t2 === 5);
+  var t3 = isAnagram("cdeaz", "abcc");
+  console.log(t3, "pass", t3 === 5);
+}
+
+testIsAnagram()

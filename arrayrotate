@@ -1,0 +1,59 @@
+
+//Simple O(n2) solution
+// function rotate(arr, d) {
+//   var temp;
+//   for(var i=0; i<d; i++) {
+//     //rotate array by 1
+//     temp = arr[0];
+//     for(var j=0; j< arr.length-1; j++) {
+//       //swap jth el with j+1
+//       arr[j] = arr[j+1];
+//       arr[j+1] = temp;
+//     }
+//   }
+// }
+
+// function testRotate() {
+//   var arr = [1,2,3,4,5];
+//   rotate(arr, 2);
+//   arr.join(',') === "3,4,5,1,2";
+//   console.log(arr, "pass", arr.join(',') === "3,4,5,1,2");
+// }
+
+
+//Solution with O(n)
+function rotate(arr,d) {
+  var len = arr.length;
+  var temp;
+  for(var i=0; i< len-1; i++) {
+    //swap arr[i] with arr[i+d]
+    temp = arr[i];
+    if(d >= len - i) d = 1;
+    arr[i] = arr[i+d];
+    arr[i+d] = temp;
+  }
+}
+
+
+function testRotate() {
+  var arr = [1,2,3,4,5];
+  rotate(arr, 1);
+  arr.join(',') === "2,3,4,5,1";
+  console.log(arr, "pass", arr.join(',') === "2,3,4,5,1");
+  arr = [1,2,3,4,5];
+  rotate(arr, 2);
+  arr.join(',') === "3,4,5,1,2";
+  console.log(arr, "pass", arr.join(',') === "3,4,5,1,2");
+  arr = [1,2,3,4,5];
+  rotate(arr, 3);
+  arr.join(',') === "4,5,1,2,3";
+  console.log(arr, "pass", arr.join(',') === "4,5,1,2,3");
+}
+
+testRotate();
+
+// Rotation example
+//[1,2,3,4,5]
+//1: [2,1,3,4,5] [2,3,1,4,5] [2,3,4,1,5] [2,3,4,5,1]
+//2: [3,2,1,4,5] [3,4,1,2,5] [3,4,5,2,1] [3,4,5,1,2]
+//3: [4,2,3,1,5] [4,5,3,1,2] [4,5,1,3,2] [4,5,3,2,1]

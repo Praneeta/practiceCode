@@ -1,0 +1,168 @@
+// Implement the following underscore JS functions.
+// underscore docs: http://underscorejs.org/
+
+var _ = require('underscore');
+
+/*
+  keys_.keys(object) 
+
+  Retrieve all the names of the object's own enumerable properties.
+*/
+var somedata = {one: 1, two: 2, three: 3};
+var all_keys = _.keys(somedata);
+console.log(all_keys);
+// => ["one", "two", "three"]
+
+
+function myKeys(inputHash) {
+  var keyArr = [];
+  for(var key in inputHash) {
+    keyArr.push(key);
+  }
+  return keyArr;
+}
+
+function testMyKeys(input, expected) {
+  var testResult = myKeys(input);
+  console.log(testResult, "passed ", testResult.join(' ') === expected.join(' '));
+}
+
+testMyKeys(somedata, ["one", "two", "three"]);
+
+
+/* 
+  _.once(function)
+
+  Creates a version of the function that can only be called one time. 
+  Repeated calls to the modified function will have no effect, returning the value from the original call. 
+*/
+
+var do_fn = function() { console.log("once") };
+var do_once = _.once(do_fn);
+for (var i = 0; i < 183; i++) {
+  do_once();
+}
+// => "once"
+
+// var calledBefore = false, 
+//     counter = 0;
+
+function emptyFunction() {
+}
+
+// function myOnce(callbackFunc) {
+//   console.log("Testing the condition of calledBefore - before check", calledBefore, counter);
+//   if(calledBefore) {
+//     return emptyFunction;
+//   }
+//   calledBefore = true;
+//   counter++;
+//   console.log("Testing the condition of calledBefore - after check", calledBefore, counter);
+//   return callbackFunc;
+// }
+
+function myOnce(callbackFunc) {
+  var counter = 0;
+  function callbackHandler() {
+    // console.log("counter in callbackHandler", counter);
+    if (counter > 0) return emptyFunction;
+    counter++;
+    return callbackFunc();
+  }
+  
+  return callbackHandler;
+}
+
+function testMyOnce() {
+  var do_my_once = myOnce(do_fn);
+  for (var i = 0; i < 183; i++) {
+    do_my_once();
+  }
+}
+
+testMyOnce();
+
+/*
+  _.debounce(function, wait) 
+  
+  Creates and returns a new debounced version of the passed function 
+  which will postpone its execution until after wait milliseconds have 
+  elapsed since the last time it was invoked. Useful for implementing 
+  behavior that should only happen after the input has stopped arriving. 
+*/
+
+var debounced = _.debounce(function() { console.log("debounce")}, 50)
+for (var i = 0; i < 20; i++) {
+  debounced();
+}
+setTimeout(debounced, 500);
+// => "debounce"
+// => "debounce"
+
+
+function myDebounce(callbackFunc, timeout) {
+  var counter = 0;
+  function singleCallFunc() {
+    if (counter > 0) return emptyFunction;
+    counter++;
+    setTimeout(function () { counter = 0; }, timeout);
+    return callbackFunc();
+  }
+  return function() {
+    setTimeout(singleCallFunc, timeout);
+  }
+}
+
+function printDebounce() {
+  console.log("my debounce");
+}
+
+var debounced = myDebounce(printDebounce, 50)
+for (var i = 0; i < 20; i++) {
+  debounced();
+}
+setTimeout(debounced, 500);
+
+
+/*
+  sample_.sample(list, [n]) 
+
+  Produce a random sample from the list. 
+  Pass a number to return n random elements from the list (not repeated, up to length m of list). 
+  Otherwise a single random item will be returned.
+*/
+
+var sample_data = [1, 2, 3, 4, 5, 6];
+var sample_results = _.sample(sample_data, 3);
+console.log(sample_results);
+// => [1, 2, 6]
+var max_sample_results = _.sample(sample_data, 7);
+console.log(max_sample_results);
+// => [1, 2, 6, 4, 3, 5]
+
+
+function mySample(inputArr, limit) {
+  var sample = [],
+      resultSample = {},
+      maxLimit = limit <= inputArr.length ? limit: inputArr.length,
+      random,
+      randomLocation;
+  for(var i=0; i<maxLimit; i++) {
+    while(randomLocation === undefined) {
+      random = Math.floor( Math.random()*(maxLimit));
+      if(!resultSample[random]) randomLocation = random;
+    }
+    resultSample[random] = inputArr[random];
+    sample.push(inputArr[random]);
+    randomLocation = undefined;
+  }
+  return sample;
+}
+
+function testMySample(inputArr, count, expectedCount) {
+  var testResult = mySample(inputArr, count);
+  console.log(testResult, testResult.length, expectedCount, "testMySample pass", expectedCount === testResult.length);
+}
+
+testMySample(sample_data, 3, 3);
+testMySample(sample_data, 7, sample_data.length);

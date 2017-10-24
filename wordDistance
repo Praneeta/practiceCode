@@ -1,0 +1,60 @@
+/* write a function that will find the shortest distance between two words in a block of text
+ * example: shortestDistance("and", "the", "The quick brown fox and a great big black bear attacked the farm and ate the farmer.") 
+ * output: 1 (only one word distance in this part 'the farm and' and 'and ate the')
+ */       
+ 
+function shortestDistance(word1, word2, sentence) {
+  var index = 0,
+      indicesofWord1 = [],
+      indicesofWord2 = [],
+      loweredCaseWord1 = word1.toLowerCase(),
+      loweredCaseWord2 = word2.toLowerCase(),
+      minDist,
+      loweredCaseWord;
+  for(var word of sentence.split(/\s|\./)) {
+    loweredCaseWord = word.toLowerCase(word) ;
+    if(loweredCaseWord === loweredCaseWord1) {
+      indicesofWord1.push(index);
+    }
+    if(loweredCaseWord === loweredCaseWord2) {
+      indicesofWord2.push(index);
+    }
+    index++;
+  }
+  console.log('indices of Word 1',  indicesofWord1);
+  console.log('indices of Word 2',  indicesofWord2);
+  return minDistanceCalculator(indicesofWord1, indicesofWord2);
+} 
+
+
+function minDistanceCalculator(word1Loc, word2Loc) {
+  var distance,
+    minDist;
+  if(word1Loc.length === 0 || word2Loc.length === 0) {
+    return -1;
+  }
+  
+  for(var loc1 of word1Loc) {
+    for(var loc2 of word2Loc) {
+      if(loc1 !== loc2) {
+        distance = Math.abs(loc2-loc1)-1;
+        if(!minDist) minDist = distance;
+        if(distance < minDist) minDist = distance;
+      }
+    } 
+  }
+  return minDist;
+}
+ 
+// Unit tests:
+
+// normal function
+console.log(shortestDistance("and", "the", "The quick brown fox and a great big black bear attacked the farm and ate the farmer.") == 1)
+// test for case insensivitivy
+console.log(shortestDistance("the", "brown", "The quick brown fox and a great big black bear attacked the farm and ate the farmer.") == 1)
+// test for showing shortest distance between like words
+console.log(shortestDistance("the", "the", "The quick brown fox and a great big black bear attacked the farm and ate the farmer.") == 3)
+// test for non-existent words
+console.log(shortestDistance("bob", "the", "The quick brown fox and a great big black bear attacked the farm and ate the farmer.") == -1)
+// test for punctuation insensitivity and difference in parameter order
+console.log(shortestDistance("farmer", "attacked", "The quick brown fox and a great big black bear attacked the farm and ate the farmer.") == 5)
